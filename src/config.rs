@@ -28,6 +28,8 @@ pub struct Config {
     #[doc(hidden)]
     pub flame_file_name: Option<String>,
     #[doc(hidden)]
+    pub serve: bool,
+    #[doc(hidden)]
     pub show_line_numbers: bool,
     #[doc(hidden)]
     pub duration: u64,
@@ -39,7 +41,7 @@ impl Default for Config {
     fn default() -> Config {
         Config{pid: None, python_program: None, dump: false, flame_file_name: None,
                non_blocking: false, show_line_numbers: false, sampling_rate: 100,
-               duration: 2, native: false}
+               duration: 2, native: false, serve: false}
     }
 }
 
@@ -71,6 +73,9 @@ impl Config {
             .arg(Arg::with_name("dump")
                 .long("dump")
                 .help("Dump the current stack traces to stdout"))
+	    .arg(Arg::with_name("serve")
+		.long("serve")
+		.help("Start up a web server for interactive results"))
             .arg(Arg::with_name("nonblocking")
                 .long("nonblocking")
                 .help("Don't pause the python process when collecting samples. Setting this option will reduce \
@@ -111,6 +116,7 @@ impl Config {
         // what to generate
         let flame_file_name = matches.value_of("flame").map(|f| f.to_owned());
         let dump = matches.occurrences_of("dump") > 0;
+        let serve = matches.occurrences_of("serve") > 0;
 
         // how to sample
         let sampling_rate = value_t!(matches, "rate", u64)?;
@@ -131,6 +137,6 @@ impl Config {
 
         Ok(Config{pid, python_program, dump, flame_file_name,
                   sampling_rate, duration,
-                  show_line_numbers, non_blocking, native})
+                  show_line_numbers, non_blocking, serve, native})
     }
 }
