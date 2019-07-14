@@ -1,0 +1,5 @@
+Cargo.lock linguist-generated=true
+remoteprocess/Cargo.lock linguist-generated=true
+src/web_viewer/assets/package-lock.json linguist-generated=true
+src/web_viewer/assets/bundle.min.js linguist-generated=true
+src/web_viewer/assets/pure-base-menu-grid.css linguist-vendored=true
