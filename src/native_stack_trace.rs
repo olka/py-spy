@@ -134,7 +134,7 @@ impl NativeStack {
                 // if we can't symbolicate, just insert a stub here.
                 merged.push(Frame{filename: "?".to_owned(),
                                   name: format!("0x{:x}", addr),
-                                  line: 0, short_filename: None, module: None});
+                                  line: 0, short_filename: None, module: None, frame_ptr: None});
             });
 
             if symbolicated_count == 1 {
@@ -237,12 +237,12 @@ impl NativeStack {
                     return None;
                 }
                 let name = cython::demangle(&name).to_owned();
-                Some(Frame{filename, line, name, short_filename: None, module: Some(frame.module.clone())})
+                Some(Frame{filename, line, name, short_filename: None, module: Some(frame.module.clone()), frame_ptr: None})
             },
             None => {
                 Some(Frame{filename: frame.module.clone(),
                            name: format!("0x{:x}", frame.addr),
-                           line: 0, short_filename: None, module: Some(frame.module.clone())})
+                           line: 0, short_filename: None, module: Some(frame.module.clone()), frame_ptr: None})
             }
         }
     }

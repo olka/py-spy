@@ -33,6 +33,10 @@ pub struct Frame {
     pub short_filename: Option<String>,
     /// The line number inside the file (or 0 for native frames without line information)
     pub line: i32,
+    /// Address of the current frame
+    pub frame_ptr: Option<String>
+
+
 }
 
 /// Given an InterpreterState, this function returns a vector of stack traces for each thread
@@ -67,7 +71,7 @@ pub fn get_stack_trace<T, P >(thread: &T, process: &P) -> Result<StackTrace, Err
         let name = copy_string(code.name(), process).context("Failed to copy function name")?;
         let line = get_line_number(&code, frame.lasti(), process).context("Failed to get line number")?;
 
-        frames.push(Frame{name, filename, line, short_filename: None, module: None});
+        frames.push(Frame{name, filename, line, short_filename: None, module: None, frame_ptr: Some(format!("{:?}", frame_ptr))});
         if frames.len() > 4096 {
             return Err(format_err!("Max frame recursion depth reached"));
         }
